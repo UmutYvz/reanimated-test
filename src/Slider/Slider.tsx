@@ -17,17 +17,21 @@ export default function App() {
   const state = new Value(State.UNDETERMINED);
   const translationX = new Value(0);
   const gestureHandler = onGestureEvent({state, translationX});
-  const translateX = diffClamp(
-    withOffset(translationX, state),
-    0,
-    SLIDER_WIDTH,
-  );
+  const x = diffClamp(withOffset(translationX, state), 0, SLIDER_WIDTH);
+  const translateX = sub(x, SIZE / 2);
   // const translateX = sub(x, SIZE / 2);
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.slider}>
+        <View>
+          <View style={styles.rail} />
+        </View>
         <PanGestureHandler {...gestureHandler}>
-          <Animated.View style={{transform: [{translateX}]}}>
+          <Animated.View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              transform: [{translateX}],
+            }}>
             <Thumb />
           </Animated.View>
         </PanGestureHandler>
@@ -49,10 +53,11 @@ const styles = StyleSheet.create({
   slider: {
     width: SLIDER_WIDTH,
     height: 20,
+    justifyContent: 'center',
   },
   rail: {
     height: 2,
     backgroundColor: 'gray',
-    borderradius: 50,
+    borderradius: 10,
   },
 });
